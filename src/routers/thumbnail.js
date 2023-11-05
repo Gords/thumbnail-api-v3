@@ -10,7 +10,8 @@ const axios = require('axios');
 // Configure multer to store uploaded files in memory
 const upload = multer({ storage: multer.memoryStorage() });
 
-router.post('/image', upload.single('image'), async (req, res, next) => {
+//Post an image to the server
+router.post('/images', upload.single('image'), async (req, res, next) => {
     const { file } = req;
     if (!file) {
         return res.status(400).send({ error: 'No image file provided' });
@@ -65,6 +66,32 @@ router.post('/image', upload.single('image'), async (req, res, next) => {
     });
 });
 
+//Get a thumbnail by id
+router.get('/thumbnails/:id', async (req, res, next) => {
+    const job = await ThumbnailJob.findById(req.params.id);
+    if (!job) {
+        return res.status(404).send({ error: 'thumbnail not found' });
+    }
+    return res.status(200).sendFile(job.thumbnailUrl);
+});
+
+//Get a list of all thumbnails
+router.get('/jobs', async (req, res, next) => {
+    const job = await ThumbnailJob.find({});
+    if (!job) {
+        return res.status(404).send({ error: 'jobs not found' });
+    }
+    return res.status(200).send(job);
+});
+
+//Get a job status by id
+router.get('/jobs/:id', async (req, res, next) => {
+    const job = await ThumbnailJob.findById(req.params.id);
+    if (!job) {
+        return res.status(404).send({ error: 'job not found' });
+    }
+    return res.status(200).send(job.status);
+});
 
 module.exports = router;
 
