@@ -1,7 +1,7 @@
 require('dotenv').config();
 require('./db/mongoose');
 const express = require('express');
-const port = process.env.PORT || 3000 ;
+const port = process.env.PORT || 3000;
 const thumbnailRouter = require('./routers/thumbnail');
 
 const app = express();
@@ -11,6 +11,12 @@ app.use(thumbnailRouter);
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
+});
+
+// Webhook endpoint
+app.post('/jobstatus', (req, res) => {
+    console.log('Webhook received:', req.body);
+    res.status(200).send({ message: 'Job Completed' });
 });
 
 app.listen(port, () => {
