@@ -6,6 +6,7 @@ const path = require('path');
 const fs = require('fs');
 const createThumbnail = require('../middleware/createThumbnail');
 const axios = require('axios');
+const mongoose = require('mongoose');
 
 // Configure multer to store uploaded files in memory
 const upload = multer({ storage: multer.memoryStorage() });
@@ -68,6 +69,9 @@ router.post('/images', upload.single('image'), async (req, res, next) => {
 
 //Get a thumbnail by id
 router.get('/thumbnails/:id', async (req, res, next) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(404).send({ error: 'Invalid ID format' });
+    }
     const job = await ThumbnailJob.findById(req.params.id);
     if (!job) {
         return res.status(404).send({ error: 'thumbnail not found' });
@@ -86,6 +90,9 @@ router.get('/jobs', async (req, res, next) => {
 
 //Get a job status by id
 router.get('/jobs/:id', async (req, res, next) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(404).send({ error: 'Invalid ID format' });
+    }
     const job = await ThumbnailJob.findById(req.params.id);
     if (!job) {
         return res.status(404).send({ error: 'job not found' });
