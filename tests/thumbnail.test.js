@@ -1,12 +1,11 @@
 const request = require('supertest');
 const app = require('../src/app');
 const ThumbnailJob = require('../src/models/thumbnail');
-const mongoose = require('mongoose');
 
 let server;
 
 beforeAll(done => {
-  server = app.listen(3000, done);
+  server = app.listen(process.env.PORT, done);
 });
 
 
