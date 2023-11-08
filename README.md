@@ -1,13 +1,14 @@
 # Thumbnail Generation API
 
 ## Overview
-This API allows users to upload images, automatically generate thumbnails, and monitor the processing jobs.
+This API allows users to upload images, automatically generate thumbnails, retrieve them and monitor the processing of them.
 
 ## How It Works
 1. **Upload an Image**: Post an image to the API to start a thumbnail generation job.
 2. **Job Status**: Check the status of the image processing job.
-3. **Retrieve Thumbnail**: Once the job is completed, download the generated thumbnail.
-4. **Job List**: View a list of all the processing jobs.
+3. **Webhook Notification**: Receive a webhook notification when the thumbnail generation is complete.
+3. **Retrieve Thumbnail**: Download the generated thumbnail once the job is completed.
+4. **Job List**: View a list of all the jobs.
 
 ## Installation
 
@@ -34,11 +35,18 @@ Upload an image file to start a thumbnail generation job.
 #### Request
 `POST /images`
 - Form data key: `image`
-- Expected file type: `image/*`
+- Expected file type: 
+   - `image/jpeg`
+   - `image/png`
+   - `image/webp`
+   - `image/gif`
+   - `image/tiff`
+
 
 #### Response
 - `201 Created`: Job initiated with job details.
 - `400 Bad Request`: No image file provided.
+- `415 unsupported media type`: Uploaded file format is not supported.
 
 ### GET `/thumbnails/:id`
 Retrieve a generated thumbnail by job ID.
@@ -71,6 +79,19 @@ Get the status of a specific thumbnail job by ID.
 #### Response
 - `200 OK`: Job status.
 - `404 Not Found`: Invalid ID or job not found.
+
+
+## Modules and Middleware:
+- **Express**: A web application framework for Node.js designed for building web applications and APIs.
+- **Multer**: A middleware for handling multipart/form-data, primarily used for uploading files.
+- **Path**: A Node.js core module for working with file and directory paths.
+- **File System (fs)**: A Node.js core module to interact with the file system.
+- **Axios**: A promise-based HTTP client for making HTTP requests from Node.js.
+- **Mongoose**: An Object Data Modeling (ODM) library for MongoDB and Node.js.
+- **Sharp**: A high-performance Node.js library for image processing. 
+- **Jest**: JavaScript testing framework. It's used for unit and integration testing.
+- **Dotenv**: A zero-dependency module that loads environment variables from a .env file into process.env .
+
 
 ## License
 
