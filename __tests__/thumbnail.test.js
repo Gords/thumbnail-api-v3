@@ -1,11 +1,12 @@
 const request = require('supertest');
 const app = require('../src/app');
 const ThumbnailJob = require('../src/models/thumbnail');
+const mongoose = require('mongoose');
 
 let server;
 
 beforeAll(done => {
-  server = app.listen(process.env.PORT, done);
+  server = app.listen(3000, done);
 });
 
 
@@ -19,7 +20,7 @@ describe('Thumbnail Router', () => {
     it('should return 201 if image is provided', async () => {
       const res = await request(app)
         .post('/images')
-        .attach('image', 'tests/fixtures/image.jpg');
+        .attach('image', '__tests__/fixtures/image.jpg');
       expect(res.statusCode).toEqual(201);
     });
   });
@@ -50,6 +51,10 @@ describe('Thumbnail Router', () => {
   });
 });
 
-afterAll(done => {
-  server.close(done);
+afterAll(async () => {
+  await new Promise(resolve => server.close(resolve)); // Close the server
+  await mongoose.disconnect(); // Disconnect from the database
 });
+
+
+module.exports = server;

@@ -1,7 +1,6 @@
 require('dotenv').config();
 require('./db/mongoose');
 const express = require('express');
-const port = process.env.PORT || 3000;
 const thumbnailRouter = require('./routers/thumbnail');
 
 const app = express();

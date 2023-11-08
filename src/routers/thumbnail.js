@@ -47,7 +47,7 @@ router.post('/images', upload.single('image'), async (req, res, next) => {
     // Process the job in the background
     createThumbnail(imagePath, thumbnailPath, job).then(() => {
         // Once complete, send a POST request to a webhook URL
-        const webhookUrl = process.env.WEBHOOK_URL;
+        const webhookUrl = 'http://localhost:3000/jobstatus';
         const data = {
             jobId: job._id,
             status: job.status,
