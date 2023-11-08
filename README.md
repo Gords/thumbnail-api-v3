@@ -80,17 +80,46 @@ Get the status of a specific thumbnail job by ID.
 - `200 OK`: Job status.
 - `404 Not Found`: Invalid ID or job not found.
 
+## Technical Choices
+- **Node.js & Express**: For their efficiency in handling I/O operations, which is crucial for an image processing service.
+- **Sharp:** For high-performance image transformations.
+- **Mongoose**: To provide a schema-based solution to model the application data.
+- **Docker**: For easy deployment and environment consistency.
+- **Jest**: For its comprehensive testing capabilities.
+- **Multer**: For its robust handling of multipart/form-data, which is crucial for accepting image uploads via the API.
+- **Axios**: For its promise-based structure, allowing for easy-to-manage asynchronous HTTP requests within the Node.js environment.
+- **Dotenv**: To loads environment variables from a .env file into process.
 
-## Modules and Middleware:
-- **Express**: A web application framework for Node.js designed for building web applications and APIs.
-- **Multer**: A middleware for handling multipart/form-data, primarily used for uploading files.
-- **Path**: A Node.js core module for working with file and directory paths.
-- **File System (fs)**: A Node.js core module to interact with the file system.
-- **Axios**: A promise-based HTTP client for making HTTP requests from Node.js.
-- **Mongoose**: An Object Data Modeling (ODM) library for MongoDB and Node.js.
-- **Sharp**: A high-performance Node.js library for image processing. 
-- **Jest**: JavaScript testing framework. It's used for unit and integration testing.
-- **Dotenv**: A zero-dependency module that loads environment variables from a .env file into process.env .
+## Architecture
+The API accepts image upload requests and starts a thumbnail generation process. It doesn't queue the jobs within the service itself but processes them asynchronously. Once a job is finished, it uses webhooks to notify the client of completion.
+
+## Trade-offs and Future Improvements
+- **Image Size Validation**: No current check for the size of uploaded images; necessary to prevent server overload.
+- **Image Storage with GridFS**: Images are not stored in the database. Using GridFS would facilitate better handling of large files.
+- **Batch Uploads**: The system doesn't handle multiple file uploads together, which could be a useful feature for users.
+- **User Account Association**: Thumbnails are not currently linked to user accounts, which would enable better content management.
+- **Production Server Optimization**: Remove development-only modules for a lighter, production-focused deployment.
+- **Secure Configuration Management**: Shift from local .env file storage to a managed service like AWS Parameter Store for enhanced security.
+- **Authentication and Access Controls**: Implementing these would secure endpoints and ensure that users can only access their resources.
+- **Caching**: When thumbnails are generated, they can be stored in a cache. Subsequent requests for the same image can be served directly from the cache, which is much faster than regenerating the thumbnail.
+- **Rate Limiting**: Essential for preventing abuse of the service by limiting the number of requests a user can make within a certain timeframe.
+- **Monitoring and Logging**: Implementing comprehensive monitoring and logging to detect and alert on issues in real time, ensuring production readiness, using a service like AWS Cloudwatch.
+- **Implement a Load Balancer**: using a service like AWS Elastic Load Balancing to distribute incoming API requests for scalability and fault tolerance.
+- **Use Serverless Architecture**: Utilizing AWS Lambda, which scales automatically, both up and down, to match demand, ensuring cost-efficiency during periods of low or no traffic.
+
+### To scale up:
+- Add API server instances behind load balancer.
+- Implement caching (Redis, Memcached).
+- Use object storage (S3) for thumbnails.
+- Implement Microservices architecture.
+
+### To scale down:
+- Reduce server instances.
+- Serverless functions (AWS Lambda).
+- Scale down datastore.
+- Aggressive caching.
+- Request rate limiting.
+
 
 
 ## License
