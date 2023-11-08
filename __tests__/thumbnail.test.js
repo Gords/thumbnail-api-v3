@@ -26,7 +26,7 @@ describe('Thumbnail Router', () => {
     it('should return 415 if unsupported file format is provided', async () => {
       const res = await request(app)
         .post('/images')
-        .attach('image', '__tests__/fixtures/unsupported-file.txt'); // Path to a text file or any unsupported format
+        .attach('image', '__tests__/fixtures/unsupported-file.txt'); 
       expect(res.statusCode).toEqual(415); // 415 is the status code for unsupported media type
     });
   });
@@ -58,8 +58,8 @@ describe('Thumbnail Router', () => {
 });
 
 afterAll(async () => {
-  await new Promise(resolve => server.close(resolve)); // Close the server
-  await mongoose.disconnect(); // Disconnect from the database
+  await new Promise(resolve => server.close(resolve)); 
+  await mongoose.disconnect(); 
 });
 
 

@@ -15,13 +15,13 @@ Ensure that Docker and Docker Compose are installed on your system. Then, follow
 
 1. Clone the repository:
    ```
-   git clone [your-repository-url]
-   cd [repository-name]
+   git clone https://github.com/Gords/thumbnail-api-v3.git
+   cd thumbnail-api-v3
    ```
 
 2. Start the application:
    ```
-   docker-compose up
+   docker compose up
    ```
 
 The API should now be running and accessible at `http://localhost:3000`.

@@ -8,9 +8,6 @@ const app = express();
 app.use(express.json());
 app.use(thumbnailRouter);
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
 
 // Webhook endpoint
 app.post('/jobstatus', (req, res) => {
