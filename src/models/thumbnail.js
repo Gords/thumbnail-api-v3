@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const ThumbnailJobSchema = new Schema({
   imagePath: String,
-  thumbnailUrl: String,
+  thumbnailPath: String,
   status: String,
 });
 

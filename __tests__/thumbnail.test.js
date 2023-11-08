@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 let server;
 
 beforeAll(done => {
-  server = app.listen(3000, done);
+  server = app.listen(process.env.PORT, done);
 });
 
 
@@ -42,7 +42,7 @@ describe('Thumbnail Router', () => {
     it('should return 200 if job is found', async () => {
       const ImageTest = await new ThumbnailJob({
         imagePath: 'tests/fixtures/image.jpg',
-        thumbnailUrl: null,
+        thumbnailPath: null,
         status: 'pending',
       }).save();
       const res = await request(app).get(`/jobs/${ImageTest._id}`);

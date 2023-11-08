@@ -28,7 +28,7 @@ router.post('/images', upload.single('image'), async (req, res, next) => {
 
     const job = new ThumbnailJob({
         imagePath,
-        thumbnailUrl: null,
+        thumbnailPath: null,
         status: 'pending',
     });
 
@@ -47,11 +47,11 @@ router.post('/images', upload.single('image'), async (req, res, next) => {
     // Process the job in the background
     createThumbnail(imagePath, thumbnailPath, job).then(() => {
         // Once complete, send a POST request to a webhook URL
-        const webhookUrl = 'http://localhost:3000/jobstatus';
+        const webhookUrl = process.env.WEBHOOK_URL;
         const data = {
             jobId: job._id,
             status: job.status,
-            thumbnailPath: job.thumbnailUrl,
+            thumbnailPath: job.thumbnailPath,
         };
 
         axios.post(webhookUrl, data)
@@ -76,7 +76,7 @@ router.get('/thumbnails/:id', async (req, res, next) => {
     if (!job) {
         return res.status(404).send({ error: 'thumbnail not found' });
     }
-    return res.status(200).sendFile(job.thumbnailUrl);
+    return res.status(200).sendFile(job.thumbnailPath);
 });
 
 //Get a list of all thumbnails

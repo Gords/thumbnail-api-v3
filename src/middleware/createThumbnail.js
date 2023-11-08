@@ -6,7 +6,7 @@ const createThumbnail = async (originalImagePath, thumbnailImagePath, job) =>{
             .resize(100, 100)
             .toFile(thumbnailImagePath);
         job.status = 'complete';
-        job.thumbnailUrl = thumbnailImagePath;
+        job.thumbnailPath = thumbnailImagePath;
         await job.save();
 
         return thumbnailImagePath;

@@ -6,8 +6,8 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - MONGODB_URL=mongodb://mongo:27017/thumbnaildb
-      - WEBHOOK_URL=http://app:3000/jobstatus
+      - MONGODB_URL=${MONGODB_URL}
+      - WEBHOOK_URL=${WEBHOOK_URL}
     depends_on:
       - mongo
   mongo:
