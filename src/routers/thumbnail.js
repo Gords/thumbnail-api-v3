@@ -11,11 +11,17 @@ const mongoose = require('mongoose');
 // Configure multer to store uploaded files in memory
 const upload = multer({ storage: multer.memoryStorage() });
 
+const supportedFormats = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/tiff'];
+
 //Post an image to the server
 router.post('/images', upload.single('image'), async (req, res, next) => {
     const { file } = req;
     if (!file) {
-        return res.status(400).send({ error: 'No image file provided' });
+        return res.status(400).send({ error: 'No file provided' });
+    }
+
+    if (!supportedFormats.includes(file.mimetype)) {
+        return res.status(415).send({ error: 'Unsupported file format' });
     }
 
     // Create the directory if it does not exist
@@ -34,7 +40,7 @@ router.post('/images', upload.single('image'), async (req, res, next) => {
 
     try {
         await job.save();
-        res.status(201).send(job); // Respond immediately that the job is started
+        res.status(201).send(job); 
     } catch (err) {
         console.error(err);
         return next(err);
@@ -44,7 +50,6 @@ router.post('/images', upload.single('image'), async (req, res, next) => {
     fs.mkdirSync(thumbnailDirectory, { recursive: true });
     // Create the thumbnail and save it to the file system
     const thumbnailPath = path.join(thumbnailDirectory, `thumbnail-${file.originalname}`);
-    // Process the job in the background
     createThumbnail(imagePath, thumbnailPath, job).then(() => {
         // Once complete, send a POST request to a webhook URL
         const webhookUrl = process.env.WEBHOOK_URL;
@@ -63,7 +68,6 @@ router.post('/images', upload.single('image'), async (req, res, next) => {
             });
     }).catch(error => {
         console.error('Error processing thumbnail:', error);
-        // Optionally send an error notification to your webhook
     });
 });
 

@@ -23,6 +23,12 @@ describe('Thumbnail Router', () => {
         .attach('image', '__tests__/fixtures/image.jpg');
       expect(res.statusCode).toEqual(201);
     });
+    it('should return 415 if unsupported file format is provided', async () => {
+      const res = await request(app)
+        .post('/images')
+        .attach('image', '__tests__/fixtures/unsupported-file.txt'); // Path to a text file or any unsupported format
+      expect(res.statusCode).toEqual(415); // 415 is the status code for unsupported media type
+    });
   });
 
   describe('GET /jobs', () => {
